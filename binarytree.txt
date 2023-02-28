@@ -1,0 +1,109 @@
+using System;
+using System.Diagnostics;
+
+namespace BinarySearchTree
+{
+    class Node //constructor for the nodes 
+    {
+        public int value;
+        public Node left;
+        public Node right;
+    }
+
+    class myTree
+    {
+        public Node insert(Node root, int v) 
+        {
+            if (root == null) //make sure a root node already exists, and makes a new node with a value if it does 
+            {
+                root = new Node();
+                root.value = v;
+            }
+            else if (v < root.value) //checks to see if the value should go in the left or right side of the tree 
+            {
+                root.left = insert(root.left, v);
+            }
+            else //checks to see if the value should go in the left or right side of the tree 
+            {
+                root.right = insert(root.right, v);
+            }
+
+            return root; //if a root node doesn't exist, it returns the root before proceeding 
+        }
+
+        public void traverse(Node root) //the traversal method for the tree, prints the results of the tree in ascending order 
+        {
+            if (root == null)
+            {
+                return;
+            }
+            traverse(root.left); //recursive call to continue to traverse the left side until a leaf is found 
+            Console.WriteLine(root.value); //prints each node in ascending order
+            traverse(root.right); //recursive call to continue to traverse the right side until a leaf is found 
+
+        }
+        public void reverseTraverse(Node root) //the traversal method for the tree, prints the results of the tree in descending order 
+        {
+            if (root == null)
+            {
+                return;
+            }
+            reverseTraverse(root.right); //recursive call to continue to traverse the right side until a leaf is found 
+            Console.WriteLine(root.value); //prints each node in descending order
+            reverseTraverse(root.left); //recursive call to continue to traverse the left side until a leaf is found 
+        }
+    }
+    class BinarySearchTree //the actual tree class 
+    {
+        static void Main(string[] args) //todo remove string[] args and confirm program works 
+        {
+            //make the root, tree, set a max size, and create a random array to fill the tree (to test)
+            Node root = null;
+            myTree myTree = new myTree();
+            int SIZE = 22;
+            int[] a = new int[SIZE];
+
+            Console.WriteLine("Making an array of size: " + SIZE + ".");
+            
+            Random random = new Random(); 
+
+            Stopwatch watch = Stopwatch.StartNew(); //check how long it takes 
+
+            for (int i = 0; i < SIZE; i++) //fills the array with random values 
+            {
+                a[i] = random.Next(10000);
+            }
+
+            watch.Stop();
+
+            Console.WriteLine("Time: " + ((double)watch.ElapsedMilliseconds / 1000.0) + " seconds.");
+            Console.WriteLine();
+            Console.WriteLine("Loading " + SIZE + " nodes...");
+
+            watch = Stopwatch.StartNew();
+
+            for (int i = 0; i < SIZE; i++)
+            {
+                root = myTree.insert(root, a[i]);
+            }
+
+            watch.Stop();
+
+            Console.WriteLine("Time: " + ((double)watch.ElapsedMilliseconds / 1000.0) + " seconds.");
+            Console.WriteLine();
+            Console.WriteLine("Traversing " + SIZE + " nodes...");
+
+            watch = Stopwatch.StartNew();
+
+            myTree.traverse(root);
+
+            watch.Stop();
+
+            Console.WriteLine("Time: " + ((double)watch.ElapsedMilliseconds / 1000.0) + " seconds.");
+            Console.WriteLine();
+            myTree.reverseTraverse(root);
+
+            Console.ReadKey();
+        }
+    }
+}
